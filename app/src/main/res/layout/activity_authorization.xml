@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:padding="12dp">
+
+		<Button
+			android:id="@+id/button_execute"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:text="@string/phrase_execute"
+			/>
+
+		<EditText
+			android:id="@+id/edit_text_mail_address"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:layout_marginLeft="12dp"
+			android:layout_marginRight="12dp"
+			android:hint="@string/phrase_mail_address"
+			android:text="lapislazuli.tk74@gmail.com"
+			/>
+
+		<EditText
+			android:id="@+id/edit_text_host_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_above="@+id/edit_text_mail_address"
+			android:layout_marginLeft="12dp"
+			android:layout_marginRight="12dp"
+			android:layout_marginBottom="36dp"
+			android:hint="@string/phrase_host_name"
+			android:text="mstdn.jp"
+			/>
+
+		<EditText
+			android:id="@+id/edit_text_password"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/edit_text_mail_address"
+			android:layout_marginLeft="12dp"
+			android:layout_marginRight="12dp"
+			android:layout_marginTop="36dp"
+			android:inputType="textPassword"
+			android:hint="@string/phrase_password"
+			android:text="Mdiva2016."
+			/>
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/view_progress"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/transparent_black_darker"
+		android:visibility="invisible">
+
+		<ProgressBar
+			style="?android:attr/progressBarStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			/>
+
+	</RelativeLayout>
+
+</FrameLayout>

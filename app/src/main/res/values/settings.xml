@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Setting file -->
+	<string name="file_name_app_values">app_values.bin</string>
+
+	<!-- API -->
+	<string name="api_user_agent">Prototype-Don</string>
+	<string name="api_uri_register_client">urn:ietf:wg:oauth:2.0:oob</string>
+	<string name="api_scope_register_client">read write follow</string>
+	<integer name="api_connection_timeout">10000</integer>
+	<integer name="api_read_timeout">10000</integer>
+
+	<string name="api_path_format">https://%1$s/%2$s</string>
+	<string name="api_path_register_client">api/v1/apps</string>
+	<string name="api_path_access_token">oauth/token</string>
+	<string name="api_path_verify_credentials">api/v1/accounts/verify_credentials</string>
+
+</resources>

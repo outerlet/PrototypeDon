@@ -1,0 +1,6 @@
+package jp.onetake.prototypedon.activity;
+
+import android.support.v7.app.AppCompatActivity;
+
+public class BasicActivity extends AppCompatActivity {
+}
