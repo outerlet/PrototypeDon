@@ -1,4 +1,4 @@
-package jp.onetake.prototypedon.fragment;
+package jp.onetake.prototypedon.fragment.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

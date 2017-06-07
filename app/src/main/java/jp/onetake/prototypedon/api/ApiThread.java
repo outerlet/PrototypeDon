@@ -138,10 +138,10 @@ public abstract class ApiThread extends Thread {
 				throw new ApiException(json.getString("error"));
 			}
 
-			ApiResponse response = ApiResponseFactory.createResponse(mRequest);
+			ApiResponse response = mRequest.createResponse();
 
 			if (response == null) {
-				throw new RuntimeException("Cannot create suitable response class. Check 'ApiResponseFactory'");
+				throw new RuntimeException("Request returns null response object.");
 			}
 
 			response.parse(json);

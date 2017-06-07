@@ -25,4 +25,9 @@ public class AccessTokenRequest extends ApiRequest {
 	public Method getMethod() {
 		return Method.Post;
 	}
+
+	@Override
+	public ApiResponse createResponse() {
+		return new AccessTokenResponse();
+	}
 }

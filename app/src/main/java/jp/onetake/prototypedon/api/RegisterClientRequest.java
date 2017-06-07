@@ -26,4 +26,9 @@ public class RegisterClientRequest extends ApiRequest {
 	public Method getMethod() {
 		return Method.Post;
 	}
+
+	@Override
+	public ApiResponse createResponse() {
+		return new RegisterClientResponse();
+	}
 }

@@ -80,4 +80,6 @@ public abstract class ApiRequest {
 	public abstract String getPath();
 
 	public abstract Method getMethod();
+
+	public abstract ApiResponse createResponse();
 }

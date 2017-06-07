@@ -18,4 +18,9 @@ public class VerifyCredentialsRequest extends ApiRequest {
 	public Method getMethod() {
 		return Method.Get;
 	}
+
+	@Override
+	public ApiResponse createResponse() {
+		return new VerifyCredentialsResponse();
+	}
 }
