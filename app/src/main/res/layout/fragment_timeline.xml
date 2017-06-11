@@ -4,11 +4,18 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<ListView
-		android:id="@+id/listview_timeline"
+	<android.support.v4.widget.SwipeRefreshLayout
+		android:id="@+id/layout_refresh"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		/>
+		android:layout_height="match_parent">
+
+		<ListView
+			android:id="@+id/listview_timeline"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			/>
+
+	</android.support.v4.widget.SwipeRefreshLayout>
 
 	<RelativeLayout
 		android:id="@+id/layout_progress"
