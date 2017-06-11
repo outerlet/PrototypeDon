@@ -19,7 +19,7 @@ public abstract class ApiRequest {
 		mIdentifier = identifier;
 	}
 
-	protected Context getContext() {
+	public Context getContext() {
 		return mContext;
 	}
 

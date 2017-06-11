@@ -5,9 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,13 +13,13 @@ import java.net.URL;
 import java.util.Locale;
 
 import jp.onetake.prototypedon.R;
-import jp.onetake.prototypedon.common.MastodonInstance;
+import jp.onetake.prototypedon.mastodon.Instance;
 
 /**
  * API呼び出しを実行するスレッド<br />
  * コンストラクタで必要な情報を入れてstartすると、リスナにレスポンスや、失敗したときには例外が返る
  */
-public abstract class ApiThread extends Thread {
+public abstract class ApiExecuteThread extends Thread {
 	public interface ApiResultListener {
 		void onApiSuccess(int identifier, ApiResponse response);
 		void onApiFailure(int identifier, ApiException exception);
@@ -30,9 +27,9 @@ public abstract class ApiThread extends Thread {
 
 	// 実行結果をUIスレッドに戻すためのHandler
 	private static class ApiResultHandler extends Handler {
-		private ApiThread mmThread;
+		private ApiExecuteThread mmThread;
 
-		ApiResultHandler(ApiThread thread) {
+		ApiResultHandler(ApiExecuteThread thread) {
 			mmThread = thread;
 		}
 
@@ -70,27 +67,26 @@ public abstract class ApiThread extends Thread {
 	private static final int MSG_WHAT_FAILURE = 10002;
 
 	private Context mContext;
-	private MastodonInstance mInstance;
+	private Instance mInstance;
 	private ApiRequest mRequest;
 	private ApiResultHandler mHandler;
 	private ApiResultListener mListener;
 
 	/**
 	 * requestから取得されるHTTPメソッドに応じて、適切なAPI実行用のスレッドオブジェクトを生成して返す
-	 * @param context	コンテキスト
-	 * @param instance	MastodonInstanceオブジェクト
+	 * @param instance	Instanceオブジェクト
 	 * @param request	リクエストオブジェクト
 	 * @return	requestを適切に処理するためのスレッドオブジェクト
 	 */
-	public static ApiThread newInstance(Context context, MastodonInstance instance, ApiRequest request) {
+	public static ApiExecuteThread newInstance(Instance instance, ApiRequest request) {
 		if (request.getMethod() == ApiRequest.Method.Get) {
-			return new ApiGetThread(context, instance, request);
+			return new ApiGetExecuteThread(request.getContext(), instance, request);
 		}
 
-		return new ApiPostThread(context, instance, request);
+		return new ApiPostExecuteThread(request.getContext(), instance, request);
 	}
 
-	protected ApiThread(Context context, MastodonInstance instance, ApiRequest request) {
+	protected ApiExecuteThread(Context context, Instance instance, ApiRequest request) {
 		mContext = context;
 		mInstance = instance;
 		mRequest = request;
@@ -132,23 +128,17 @@ public abstract class ApiThread extends Thread {
 
 			android.util.Log.d(getClass().getSimpleName(), buffer.toString());
 
-			JSONObject json = new JSONObject(buffer.toString());
-
-			if (json.has("error")) {
-				throw new ApiException(json.getString("error"));
-			}
-
 			ApiResponse response = mRequest.createResponse();
 
 			if (response == null) {
 				throw new RuntimeException("Request returns null response object.");
 			}
 
-			response.parse(json);
+			response.parse(buffer.toString());
 
 			return response;
-		} catch (IOException | JSONException e) {
-			throw new ApiException(e);
+		} catch (IOException ioe) {
+			throw new ApiException(ioe);
 		}
 	}
 

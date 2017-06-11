@@ -9,13 +9,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import jp.onetake.prototypedon.common.MastodonInstance;
+import jp.onetake.prototypedon.mastodon.Instance;
 
 /**
  * API呼び出しをPOSTメソッドで行うスレッド
  */
-public class ApiPostThread extends ApiThread {
-	protected ApiPostThread(Context context, MastodonInstance instance, ApiRequest request) {
+public class ApiPostExecuteThread extends ApiExecuteThread {
+	protected ApiPostExecuteThread(Context context, Instance instance, ApiRequest request) {
 		super(context, instance, request);
 	}
 

@@ -7,7 +7,11 @@ public class AccessTokenResponse extends ApiResponse {
 	public String accessToken;
 
 	@Override
-	public void parse(JSONObject json) throws JSONException {
-		accessToken = json.getString("access_token");
+	public void parse(String jsonText) throws ApiException {
+		try {
+			accessToken = new JSONObject(jsonText).getString("access_token");
+		} catch (JSONException jse) {
+			throw new ApiException(jse);
+		}
 	}
 }

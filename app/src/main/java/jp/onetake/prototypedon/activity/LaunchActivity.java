@@ -12,23 +12,23 @@ import java.util.Locale;
 
 import jp.onetake.prototypedon.R;
 import jp.onetake.prototypedon.api.ApiException;
-import jp.onetake.prototypedon.api.ApiThread;
+import jp.onetake.prototypedon.api.ApiExecuteThread;
 import jp.onetake.prototypedon.api.ApiResponse;
 import jp.onetake.prototypedon.api.VerifyCredentialsRequest;
-import jp.onetake.prototypedon.common.MastodonInstance;
-import jp.onetake.prototypedon.common.MastodonInstanceHolder;
 import jp.onetake.prototypedon.fragment.AuthorizeFragment;
 import jp.onetake.prototypedon.fragment.dialog.AlertDialogFragment;
+import jp.onetake.prototypedon.mastodon.Instance;
+import jp.onetake.prototypedon.mastodon.InstanceHolder;
 import jp.onetake.prototypedon.util.DebugLog;
 
 public class LaunchActivity extends BasicActivity
-		implements ApiThread.ApiResultListener, AlertDialogFragment.OnConfirmListener {
+		implements ApiExecuteThread.ApiResultListener, AlertDialogFragment.OnConfirmListener {
 	private static final int API_ID_VERIFY_CREDENTIALS			= 10001;
 	private static final String TAG_DIALOG_INVALID_INSTANCE		= "LaunchActivity.TAG_DIALOG_INVALID_INSTANCE";
 	private static final String TAG_DIALOG_INSTANCE_NOT_EXIST	= "LaunchActivity.TAG_DIALOG_INSTANCE_EMPTY";
 
-	private MastodonInstanceHolder mInstanceHolder;
-	private List<MastodonInstance> mInvalidList;
+	private InstanceHolder mInstanceHolder;
+	private List<Instance> mInvalidList;
 	private int mCurrentIndex;
 
     @Override
@@ -37,7 +37,7 @@ public class LaunchActivity extends BasicActivity
 
 		setContentView(R.layout.activity_launch);
 
-		mInstanceHolder = MastodonInstanceHolder.getSingleton();
+		mInstanceHolder = InstanceHolder.getSingleton();
 		mInvalidList = new ArrayList<>();
 		mCurrentIndex = -1;
 
@@ -78,7 +78,7 @@ public class LaunchActivity extends BasicActivity
 			throw new RuntimeException("Dialog tag is empty.");
 		} else switch (tag) {
 			case TAG_DIALOG_INVALID_INSTANCE:
-				for (MastodonInstance instance : mInvalidList) {
+				for (Instance instance : mInvalidList) {
 					mInstanceHolder.remove(instance);
 				}
 
@@ -119,12 +119,17 @@ public class LaunchActivity extends BasicActivity
 			VerifyCredentialsRequest request =
 					new VerifyCredentialsRequest(getApplicationContext(), API_ID_VERIFY_CREDENTIALS);
 
-			ApiThread t = ApiThread.newInstance(this, mInstanceHolder.get(mCurrentIndex), request);
+			Instance instance = mInstanceHolder.get(mCurrentIndex);
+
+			DebugLog.debug(getClass(), instance.getHostName() + ": token = " + instance.getAccessToken());
+
+			ApiExecuteThread t = ApiExecuteThread.newInstance(instance, request);
 			t.setListener(this);
 			t.start();
 		} else {
 			if (mInvalidList.size() > 0) {
-				String text = String.format(Locale.JAPAN, getString(R.string.message_invalid_instance_error), mInvalidList.size());
+				String text = String.format(
+						Locale.JAPAN, getString(R.string.message_invalid_instance_error), mInvalidList.size());
 
 				AlertDialogFragment
 						.newInstance(getString(R.string.phrase_error), text)

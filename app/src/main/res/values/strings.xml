@@ -14,14 +14,11 @@
 
 	<string name="message_initializing">初期化中です...</string>
 	<string name="message_instance_not_exists">インスタンス情報が見つかりません。\n登録画面に移動します。</string>
-
+	<string name="message_instance_saved">インスタンスを登録しました。</string>
 	<string name="message_instance_save_error">インスタンス情報の保存に失敗しました。</string>
-	<string name="message_instance_save_success">インスタンスを登録しました。</string>
 	<string name="message_credential_canceled_error">アプリの認証が取り消されました。</string>
 	<string name="message_invalid_instance_error">無効なインスタンス情報が%1$d件検出されました。\n削除します。</string>
+	<string name="message_get_timeline_error">タイムラインの取得に失敗しました。</string>
 	<string name="message_format_http_error">HTTP Error: Status code = %1$d</string>
-
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

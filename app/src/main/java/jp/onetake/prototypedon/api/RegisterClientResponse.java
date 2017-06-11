@@ -9,9 +9,15 @@ public class RegisterClientResponse extends ApiResponse {
 	public String clientSecret;
 
 	@Override
-	public void parse(JSONObject json) throws JSONException {
-		id = json.getString("id");
-		clientId = json.getString("client_id");
-		clientSecret = json.getString("client_secret");
+	public void parse(String jsonText) throws ApiException {
+		try {
+			JSONObject json = new JSONObject(jsonText);
+
+			id = json.getString("id");
+			clientId = json.getString("client_id");
+			clientSecret = json.getString("client_secret");
+		} catch (JSONException jse) {
+			throw new ApiException(jse);
+		}
 	}
 }

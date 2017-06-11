@@ -1,4 +1,4 @@
-package jp.onetake.prototypedon.common;
+package jp.onetake.prototypedon.mastodon;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,21 +14,21 @@ import java.util.ArrayList;
 
 import jp.onetake.prototypedon.R;
 
-public class MastodonInstanceHolder implements Serializable {
+public class InstanceHolder implements Serializable {
 	private static final long serialVersionUID = -5436433305647206164L;
 
-	private static MastodonInstanceHolder mSingleton;
+	private static InstanceHolder mSingleton;
 
-	private ArrayList<MastodonInstance> mInstanceList;
+	private ArrayList<Instance> mInstanceList;
 
-	public static MastodonInstanceHolder getSingleton() {
+	public static InstanceHolder getSingleton() {
 		if (mSingleton == null) {
-			mSingleton = new MastodonInstanceHolder();
+			mSingleton = new InstanceHolder();
 		}
 		return mSingleton;
 	}
 
-	private MastodonInstanceHolder() {
+	private InstanceHolder() {
 		mInstanceList = new ArrayList<>();
 	}
 
@@ -36,12 +36,12 @@ public class MastodonInstanceHolder implements Serializable {
 		return mInstanceList.size();
 	}
 
-	public MastodonInstance get(int index) {
+	public Instance get(int index) {
 		return mInstanceList.get(index);
 	}
 
-	public void add(MastodonInstance instance) {
-		for (MastodonInstance inst : mInstanceList) {
+	public void add(Instance instance) {
+		for (Instance inst : mInstanceList) {
 			if (inst.equals(instance)) {
 				return;
 			}
@@ -50,8 +50,8 @@ public class MastodonInstanceHolder implements Serializable {
 		mInstanceList.add(instance);
 	}
 
-	public void remove(MastodonInstance instance) {
-		for (MastodonInstance inst : mInstanceList) {
+	public void remove(Instance instance) {
+		for (Instance inst : mInstanceList) {
 			if (inst.equals(instance)) {
 				mInstanceList.remove(inst);
 			}
@@ -72,11 +72,11 @@ public class MastodonInstanceHolder implements Serializable {
 
 		try (FileInputStream fis = context.getApplicationContext().openFileInput(fileName);
 			 ObjectInputStream ois = new ObjectInputStream(fis)) {
-			MastodonInstanceHolder holder = (MastodonInstanceHolder) ois.readObject();
+			InstanceHolder holder = (InstanceHolder) ois.readObject();
 
 			mInstanceList.clear();
 
-			for (MastodonInstance instance : holder.mInstanceList) {
+			for (Instance instance : holder.mInstanceList) {
 				mInstanceList.add(instance);
 			}
 

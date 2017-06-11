@@ -2,7 +2,6 @@ package jp.onetake.prototypedon.fragment;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,27 +13,24 @@ import jp.onetake.prototypedon.R;
 import jp.onetake.prototypedon.api.AccessTokenRequest;
 import jp.onetake.prototypedon.api.AccessTokenResponse;
 import jp.onetake.prototypedon.api.ApiException;
+import jp.onetake.prototypedon.api.ApiExecuteThread;
 import jp.onetake.prototypedon.api.ApiResponse;
-import jp.onetake.prototypedon.api.ApiThread;
 import jp.onetake.prototypedon.api.RegisterClientRequest;
 import jp.onetake.prototypedon.api.RegisterClientResponse;
-import jp.onetake.prototypedon.common.MastodonInstance;
-import jp.onetake.prototypedon.common.MastodonInstanceHolder;
-import jp.onetake.prototypedon.fragment.dialog.AlertDialogFragment;
+import jp.onetake.prototypedon.mastodon.Instance;
+import jp.onetake.prototypedon.mastodon.InstanceHolder;
 import jp.onetake.prototypedon.util.DebugLog;
 
-public class AuthorizeFragment extends Fragment implements View.OnClickListener, ApiThread.ApiResultListener {
+public class AuthorizeFragment extends BasicFragment
+		implements View.OnClickListener, ApiExecuteThread.ApiResultListener {
 	public static final String DIALOG_TAG_SUCCESS		= "AuthorizeFragment.DIALOG_TAG_SUCCESS";
 	public static final String DIALOG_TAG_SAVE_ERROR	= "AuthorizeFragment.DIALOG_TAG_SAVE_ERROR";
-
-	private static final int API_ID_REGISTER_CLIENT	= 10001;
-	private static final int API_ID_ACCESS_TOKEN	= 10002;
 
 	private EditText mHostNameView;
 	private EditText mMailAddressView;
 	private EditText mPasswordView;
 	private View mProgressView;
-	private MastodonInstance mInstance;
+	private Instance mInstance;
 
 	public AuthorizeFragment() {
 	}
@@ -58,21 +54,22 @@ public class AuthorizeFragment extends Fragment implements View.OnClickListener,
 	public void onClick(View view) {
 		String hostName = mHostNameView.getText().toString();
 
-		mInstance = new MastodonInstance();
+		mInstance = new Instance();
 		mInstance.setHostName(hostName);
 
-		RegisterClientRequest request = new RegisterClientRequest(getActivity(), API_ID_REGISTER_CLIENT);
+		RegisterClientRequest request = new RegisterClientRequest(
+				getActivity(), getResources().getInteger(R.integer.api_id_register_client));
 
 		mProgressView.setVisibility(View.VISIBLE);
 
-		ApiThread thread = ApiThread.newInstance(getActivity(), mInstance, request);
+		ApiExecuteThread thread = ApiExecuteThread.newInstance(mInstance, request);
 		thread.setListener(this);
 		thread.start();
 	}
 
 	@Override
 	public void onApiSuccess(int identifier, ApiResponse response) {
-		if (identifier == API_ID_REGISTER_CLIENT) {
+		if (identifier == getResources().getInteger(R.integer.api_id_register_client)) {
 			RegisterClientResponse res = (RegisterClientResponse) response;
 
 			mInstance.setClientId(res.clientId);
@@ -86,7 +83,8 @@ public class AuthorizeFragment extends Fragment implements View.OnClickListener,
 			String mailAddress = mMailAddressView.getText().toString();
 			String password = mPasswordView.getText().toString();
 
-			AccessTokenRequest request = new AccessTokenRequest(getActivity(), API_ID_ACCESS_TOKEN);
+			AccessTokenRequest request =
+					new AccessTokenRequest(getActivity(), getResources().getInteger(R.integer.api_id_access_token));
 			request.client_id = res.clientId;
 			request.client_secret = res.clientSecret;
 			request.grant_type = "password";
@@ -95,22 +93,22 @@ public class AuthorizeFragment extends Fragment implements View.OnClickListener,
 			request.scope = "read%20write%20follow";
 			// TO
 
-			ApiThread thread = ApiThread.newInstance(getActivity(), mInstance, request);
+			ApiExecuteThread thread = ApiExecuteThread.newInstance(mInstance, request);
 			thread.setListener(this);
 			thread.start();
-		} else if (identifier == API_ID_ACCESS_TOKEN) {
+		} else if (identifier == getResources().getInteger(R.integer.api_id_access_token)) {
 			AccessTokenResponse res = (AccessTokenResponse)response;
 
 			mInstance.setAccessToken(res.accessToken);
 
-			DebugLog.debug(getClass(), "accessToken = " + res.accessToken);
+			DebugLog.debug(getClass(), "access_token = " + res.accessToken);
 
 			try {
-				MastodonInstanceHolder holder = MastodonInstanceHolder.getSingleton();
+				InstanceHolder holder = InstanceHolder.getSingleton();
 				holder.add(mInstance);
 				holder.save(getActivity().getApplicationContext());
 
-				showDialog(R.string.phrase_confirmation, R.string.message_instance_save_success, DIALOG_TAG_SUCCESS);
+				showDialog(R.string.phrase_confirmation, R.string.message_instance_saved, DIALOG_TAG_SUCCESS);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 
@@ -130,11 +128,5 @@ public class AuthorizeFragment extends Fragment implements View.OnClickListener,
 		}
 
 		showDialog(R.string.phrase_error, R.string.message_instance_save_error, DIALOG_TAG_SAVE_ERROR);
-	}
-
-	private void showDialog(int titleResId, int messageResId, String tag) {
-		AlertDialogFragment
-				.newInstance(getString(titleResId), getString(messageResId))
-				.show(getActivity().getSupportFragmentManager(), tag);
 	}
 }

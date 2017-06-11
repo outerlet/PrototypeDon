@@ -3,7 +3,7 @@ package jp.onetake.prototypedon.util;
 import jp.onetake.prototypedon.BuildConfig;
 
 public class DebugLog {
-	private static final boolean IS_DEBUG = BuildConfig.BUILD_TYPE.toLowerCase().contains("debug");
+	private static final boolean IS_DEBUG = BuildConfig.BUILD_TYPE.equals("debug");
 
 	public static void debug(Class cls, String text) {
 		if (IS_DEBUG) {
