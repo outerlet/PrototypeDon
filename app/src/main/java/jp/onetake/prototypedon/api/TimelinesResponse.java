@@ -7,12 +7,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.onetake.prototypedon.status.Status;
+import jp.onetake.prototypedon.mastodon.Status;
 
-public class PublicTimelinesResponse extends ApiResponse {
+public class TimelinesResponse extends ApiResponse {
 	public List<Status> statusList;
 
-	public PublicTimelinesResponse() {
+	public TimelinesResponse() {
 		statusList = new ArrayList<>();
 	}
 

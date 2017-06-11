@@ -8,7 +8,9 @@
 	<integer name="api_id_verify_credentials">10001</integer>
 	<integer name="api_id_register_client">10002</integer>
 	<integer name="api_id_access_token">10003</integer>
-	<integer name="api_id_public_timeline">10004</integer>
+	<integer name="api_id_home_timeline">10004</integer>
+	<integer name="api_id_local_timeline">10005</integer>
+	<integer name="api_id_public_timeline">10006</integer>
 
 	<string name="api_user_agent">Prototype-Don</string>
 	<string name="api_uri_register_client">urn:ietf:wg:oauth:2.0:oob</string>

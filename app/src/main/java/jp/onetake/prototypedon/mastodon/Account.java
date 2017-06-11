@@ -1,18 +1,18 @@
-package jp.onetake.prototypedon.status;
+package jp.onetake.prototypedon.mastodon;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Account {
-	public String id;
+	public int id;
 	public String username;
 	public String acct;
 	public String displayName;
 	public String locked;
 	public String createdAt;
-	public String followersCount;
-	public String followingCount;
-	public String statusesCount;
+	public int followersCount;
+	public int followingCount;
+	public int statusesCount;
 	public String note;
 	public String url;
 	public String avatar;
@@ -22,15 +22,15 @@ public class Account {
 
 	public Account(JSONObject json) throws JSONException {
 		if (json != null) {
-			id = json.optString("id");
+			id = json.optInt("id");
 			username = json.optString("username");
 			acct = json.optString("acct");
 			displayName = json.optString("display_name");
 			locked = json.optString("locked");
 			createdAt = json.optString("created_at");
-			followersCount = json.optString("followers_count");
-			followingCount = json.optString("following_count");
-			statusesCount = json.optString("statuses_count");
+			followersCount = json.optInt("followers_count");
+			followingCount = json.optInt("following_count");
+			statusesCount = json.optInt("statuses_count");
 			note = json.optString("note");
 			url = json.optString("url");
 			avatar = json.optString("avatar");

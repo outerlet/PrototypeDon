@@ -1,4 +1,4 @@
-package jp.onetake.prototypedon.status;
+package jp.onetake.prototypedon.mastodon;
 
 import org.json.JSONException;
 import org.json.JSONObject;

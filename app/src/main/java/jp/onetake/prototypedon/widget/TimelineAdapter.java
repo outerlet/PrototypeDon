@@ -1,32 +1,35 @@
 package jp.onetake.prototypedon.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.graphics.Bitmap;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import jp.onetake.prototypedon.R;
-import jp.onetake.prototypedon.status.Status;
+import jp.onetake.prototypedon.mastodon.Status;
+import jp.onetake.prototypedon.net.ImageLoadThread;
 import jp.onetake.prototypedon.text.StatusLinkMovementMethod;
 
 public class TimelineAdapter extends ArrayAdapter<Status> {
 	private class ViewHolder {
 		TextView textView;
+		ImageView avatarView;
 	}
 
+	private AvatarHolder mHolder;
 	private StatusLinkMovementMethod mMethod;
 
 	public TimelineAdapter(Context context, StatusLinkMovementMethod method) {
 		super(context, -1);
 
+		mHolder = new AvatarHolder(context);
 		mMethod = method;
 	}
 
@@ -38,21 +41,34 @@ public class TimelineAdapter extends ArrayAdapter<Status> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+		ViewHolder viewHolder;
 
 		if (convertView == null) {
-			holder = new ViewHolder();
+			viewHolder = new ViewHolder();
 
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_timeline, parent, false);
-			holder.textView = (TextView)convertView.findViewById(R.id.textview_content);
-			holder.textView.setMovementMethod(mMethod);
-			convertView.setTag(holder);
+			viewHolder.avatarView = (ImageView)convertView.findViewById(R.id.imageview_avatar);
+			viewHolder.textView = (TextView)convertView.findViewById(R.id.textview_content);
+			viewHolder.textView.setMovementMethod(mMethod);
+			convertView.setTag(viewHolder);
 		} else {
-			holder = (ViewHolder)convertView.getTag();
+			viewHolder = (ViewHolder)convertView.getTag();
 		}
 
 		Status status = getItem(position);
-		holder.textView.setText(Html.fromHtml(status.content));
+
+		// contentのセット
+		viewHolder.textView.setText(Html.fromHtml(status.content));
+
+		// アバター画像のセット(未取得ならロード)
+		final ViewHolder holder = viewHolder;
+		Bitmap avatarBitmap = mHolder.get(status.account, new ImageLoadThread.ImageLoadListener() {
+			@Override
+			public void onLoad(Bitmap bitmap) {
+				holder.avatarView.setImageBitmap(bitmap);
+			}
+		});
+		viewHolder.avatarView.setImageBitmap(avatarBitmap);
 
 		return convertView;
 	}

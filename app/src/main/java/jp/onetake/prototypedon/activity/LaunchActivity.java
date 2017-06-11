@@ -86,7 +86,7 @@ public class LaunchActivity extends BasicActivity
 					mInstanceHolder.save(getApplicationContext());
 
 					if (mInstanceHolder.size() > 0) {
-						startActivity(new Intent(this, MainActivity.class));
+						startActivity(new Intent(this, TimelinesActivity.class));
 					} else {
 						AlertDialogFragment
 								.newInstance(getString(R.string.phrase_confirmation), getString(R.string.message_instance_not_exists))
@@ -102,7 +102,7 @@ public class LaunchActivity extends BasicActivity
 
 				break;
 			case AuthorizeFragment.DIALOG_TAG_SUCCESS:
-				Intent intent = new Intent(this, MainActivity.class);
+				Intent intent = new Intent(this, TimelinesActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 
@@ -135,7 +135,7 @@ public class LaunchActivity extends BasicActivity
 						.newInstance(getString(R.string.phrase_error), text)
 						.show(getSupportFragmentManager(), TAG_DIALOG_INVALID_INSTANCE);
 			} else {
-				Intent intent = new Intent(this, MainActivity.class);
+				Intent intent = new Intent(this, TimelinesActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 			}
