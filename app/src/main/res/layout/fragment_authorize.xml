@@ -25,7 +25,6 @@
 			android:layout_marginLeft="12dp"
 			android:layout_marginRight="12dp"
 			android:hint="@string/phrase_mail_address"
-			android:text="lapislazuli.tk74@gmail.com"
 			/>
 
 		<EditText
@@ -37,7 +36,6 @@
 			android:layout_marginRight="12dp"
 			android:layout_marginBottom="36dp"
 			android:hint="@string/phrase_host_name"
-			android:text="mstdn.jp"
 			/>
 
 		<EditText
@@ -50,7 +48,6 @@
 			android:layout_marginTop="36dp"
 			android:inputType="textPassword"
 			android:hint="@string/phrase_password"
-			android:text="Mdiva2016."
 			/>
 
 	</RelativeLayout>
