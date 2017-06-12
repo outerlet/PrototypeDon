@@ -22,6 +22,8 @@ public class VerifyCredentialsResponse extends ApiResponse {
 
 	@Override
 	public void parse(String jsonText) throws ApiException {
+		super.parse(jsonText);
+
 		try {
 			JSONObject json = new JSONObject(jsonText);
 

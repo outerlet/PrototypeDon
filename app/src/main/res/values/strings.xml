@@ -11,11 +11,13 @@
 	<string name="phrase_mail_address">メールアドレス</string>
 	<string name="phrase_password">パスワード</string>
 	<string name="phrase_execute">実行</string>
+	<string name="phrase_toot">トゥート</string>
 
 	<string name="title_timeline">タイムライン</string>
 	<string name="title_timeline_home">ホーム</string>
 	<string name="title_timeline_local">ローカル</string>
 	<string name="title_timeline_public">連合</string>
+	<string name="title_toot">トゥートを送信</string>
 
 	<string name="text_instance_list">インスタンス一覧</string>
 	<string name="text_add_instance">インスタンスの追加</string>
@@ -30,5 +32,7 @@
 	<string name="message_get_timeline_error">タイムラインの取得に失敗しました。</string>
 	<string name="message_format_http_error">HTTP Error: Status code = %1$d</string>
 	<string name="message_instance_already_registered">インスタンスは既に登録されています。</string>
+	<string name="message_tooted">トゥートしました。</string>
+	<string name="message_toot_error">トゥートを送信できませんでした。</string>
 
 </resources>

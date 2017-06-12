@@ -18,6 +18,8 @@ public class TimelinesResponse extends ApiResponse {
 
 	@Override
 	public void parse(String jsonText) throws ApiException {
+		super.parse(jsonText);
+
 		try {
 			JSONArray array = new JSONArray(jsonText);
 

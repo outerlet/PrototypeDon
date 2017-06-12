@@ -37,9 +37,9 @@ public class AuthorizeFragment extends BaseFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_authorize, container, false);
 
-		mHostNameView = (EditText)view.findViewById(R.id.edit_text_host_name);
-		mMailAddressView = (EditText)view.findViewById(R.id.edit_text_mail_address);
-		mPasswordView = (EditText)view.findViewById(R.id.edit_text_password);
+		mHostNameView = (EditText)view.findViewById(R.id.edittext_host_name);
+		mMailAddressView = (EditText)view.findViewById(R.id.edittext_mail_address);
+		mPasswordView = (EditText)view.findViewById(R.id.edittext_password);
 		mProgressView = view.findViewById(R.id.layout_progress);
 
 		view.findViewById(R.id.button_execute).setOnClickListener(this);

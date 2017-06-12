@@ -3,15 +3,17 @@ package jp.onetake.prototypedon.api;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AccessTokenResponse extends ApiResponse {
-	public String accessToken;
+import jp.onetake.prototypedon.mastodon.Status;
+
+public class TootResponse extends ApiResponse {
+	public Status status;
 
 	@Override
 	public void parse(String jsonText) throws ApiException {
 		super.parse(jsonText);
 
 		try {
-			accessToken = new JSONObject(jsonText).getString("access_token");
+			status = new Status(new JSONObject(jsonText));
 		} catch (JSONException jse) {
 			throw new ApiException(jse);
 		}

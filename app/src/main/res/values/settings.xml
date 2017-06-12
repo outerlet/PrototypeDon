@@ -12,6 +12,7 @@
 	<integer name="api_id_local_timeline">10005</integer>
 	<integer name="api_id_public_timeline">10006</integer>
 	<integer name="api_id_hashtag_timeline">10007</integer>
+	<integer name="api_id_toot">10008</integer>
 
 	<string name="api_user_agent">Prototype-Don</string>
 	<string name="api_uri_register_client">urn:ietf:wg:oauth:2.0:oob</string>
@@ -26,5 +27,6 @@
 	<string name="api_path_timelines_home">api/v1/timelines/home</string>
 	<string name="api_path_timelines_public">api/v1/timelines/public</string>
 	<string name="api_path_timelines_hashtag">api/v1/timelines/tag</string>
+	<string name="api_path_toot">/api/v1/statuses</string>
 
 </resources>
