@@ -7,9 +7,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HeaderViewListAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import jp.onetake.prototypedon.R;
 import jp.onetake.prototypedon.api.ApiException;
@@ -18,9 +19,11 @@ import jp.onetake.prototypedon.api.ApiResponse;
 import jp.onetake.prototypedon.api.TimelinesRequest;
 import jp.onetake.prototypedon.api.TimelinesResponse;
 import jp.onetake.prototypedon.mastodon.Instance;
+import jp.onetake.prototypedon.mastodon.Status;
 import jp.onetake.prototypedon.mastodon.TimelineType;
 import jp.onetake.prototypedon.text.StatusLinkMovementMethod;
 import jp.onetake.prototypedon.widget.TimelineAdapter;
+import jp.onetake.prototypedon.widget.TimelineFooterView;
 
 public class TimelineFragment extends BaseFragment
 		implements ApiExecuteThread.ApiResultListener, StatusLinkMovementMethod.LinkClickListener {
@@ -63,6 +66,7 @@ public class TimelineFragment extends BaseFragment
 
 	private SwipeRefreshLayout mRefreshLayout;
 	private ListView mListView;
+	private TimelineFooterView mFooterView;
 	private View mProgressView;
 	private Instance mInstance;
 	private TimelineType mType;
@@ -74,7 +78,7 @@ public class TimelineFragment extends BaseFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_timeline, container, false);
+		View view = inflater.inflate(R.layout.fragment_timeline, container, false);
 
 		mRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.layout_refresh);
 		mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -87,8 +91,17 @@ public class TimelineFragment extends BaseFragment
 		StatusLinkMovementMethod method = new StatusLinkMovementMethod();
 		method.setListener(this);
 
+		mFooterView = new TimelineFooterView(getContext());
+		mFooterView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				launchRequest(Trigger.Add);
+			}
+		});
+
 		mListView = (ListView)view.findViewById(R.id.listview_timeline);
 		mListView.setAdapter(new TimelineAdapter(getContext(), method));
+		mListView.addFooterView(mFooterView);
 
 		mProgressView = view.findViewById(R.id.layout_progress);
 
@@ -100,7 +113,7 @@ public class TimelineFragment extends BaseFragment
 		super.onActivityCreated(savedInstanceState);
 
 		mInstance = getArguments().getParcelable(KEY_INSTANCE);
-		((TimelineAdapter)mListView.getAdapter()).setInstance(mInstance);
+		getAdapter().setInstance(mInstance);
 
 		String textType = getArguments().getString(KEY_TYPE);
 		if (!TextUtils.isEmpty(textType)) {
@@ -122,6 +135,15 @@ public class TimelineFragment extends BaseFragment
 			request = new TimelinesRequest(getContext(), mHashTag, mApiId);
 		}
 
+		if (trigger == Trigger.Add) {
+			TimelineAdapter adapter = getAdapter();
+
+			Status status = adapter.getItem(adapter.getCount() - 1);
+			if (status != null) {
+				request.setMaxId(status.id);
+			}
+		}
+
 		ApiExecuteThread thread = ApiExecuteThread.newInstance(mInstance, request);
 		thread.setListener(this);
 		thread.start();
@@ -133,14 +155,18 @@ public class TimelineFragment extends BaseFragment
 	public void onApiSuccess(int apiId, ApiResponse response) {
 		TimelinesResponse res = (TimelinesResponse)response;
 
-		TimelineAdapter adapter = (TimelineAdapter)mListView.getAdapter();
+		TimelineAdapter adapter = getAdapter();
 
 		if (mTrigger == Trigger.Refresh) {
 			adapter.clear();
 		}
 
-		adapter.add(res.statusList);
-		adapter.notifyDataSetChanged();
+		if (res.statusList.size() > 0) {
+			adapter.add(res.statusList);
+			adapter.notifyDataSetChanged();
+		} else {
+			mListView.removeFooterView(mFooterView);
+		}
 
 		dismissProgress();
 	}
@@ -167,7 +193,7 @@ public class TimelineFragment extends BaseFragment
 				mProgressView.setVisibility(View.VISIBLE);
 				break;
 			case Add:
-				// TODO:追加読み込みのために出すぐるぐるを表示する
+				mFooterView.setProgress(true);
 				break;
 		}
 
@@ -183,8 +209,18 @@ public class TimelineFragment extends BaseFragment
 				mRefreshLayout.setRefreshing(false);
 				break;
 			case Add:
-				// TODO:追加読み込みのために出すぐるぐるを消す
+				mFooterView.setProgress(false);
 				break;
 		}
+	}
+
+	private TimelineAdapter getAdapter() {
+		ListAdapter adapter = mListView.getAdapter();
+		if (adapter instanceof HeaderViewListAdapter) {
+			HeaderViewListAdapter headerAdapter = (HeaderViewListAdapter)adapter;
+			return (TimelineAdapter)headerAdapter.getWrappedAdapter();
+		}
+
+		return (TimelineAdapter)adapter;
 	}
 }

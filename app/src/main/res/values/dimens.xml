@@ -16,5 +16,6 @@
 	<!-- Timeline -->
 	<dimen name="timeline_space_avatar_content">8dp</dimen>
 	<dimen name="timeline_padding">4dp</dimen>
+	<dimen name="timeline_footer_padding">12dp</dimen>
 
 </resources>

@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import jp.onetake.prototypedon.R;
 import jp.onetake.prototypedon.mastodon.Instance;
+import jp.onetake.prototypedon.util.DebugLog;
 
 /**
  * API呼び出しを実行するスレッド<br />
@@ -149,8 +150,12 @@ public abstract class ApiExecuteThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			URL url = new URL(String.format(
-					Locale.US, mContext.getString(R.string.api_path_format), mInstance.getHostName(), mRequest.getPath()));
+			String textUrl = String.format(
+					Locale.US, mContext.getString(R.string.api_path_format), mInstance.getHostName(), mRequest.getPath());
+
+			DebugLog.debug(getClass(), "URL = " + textUrl);
+
+			URL url = new URL(textUrl);
 
 			HttpURLConnection connection = prepareConnection(url);
 

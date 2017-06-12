@@ -17,15 +17,15 @@ public class Status {
 	public List<Tag> tags;
 	public Application application;
 
-	public String id;
+	public long id;
 	public String uri;
 	public String url;
 	public String inReplyToId;
 	public String inReplyToAccountId;
 	public String content;
 	public String createdAt;
-	public String reblogsCount;
-	public String favouritesCount;
+	public int reblogsCount;
+	public int favouritesCount;
 	public String reblogged;
 	public String favourited;
 	public String sensitive;
@@ -36,15 +36,15 @@ public class Status {
 	public Status(JSONObject json) throws JSONException {
 		DebugLog.debug(getClass(), json.toString());
 
-		id = json.optString("id");
+		id = json.optLong("id");
 		uri = json.optString("uri");
 		url = json.optString("url");
 		inReplyToId = json.optString("in_reply_to_id");
 		inReplyToAccountId = json.optString("in_reply_to_account_id");
 		content = json.optString("content");
 		createdAt = json.optString("created_at");
-		reblogsCount = json.optString("reblogs_count");
-		favouritesCount = json.optString("favourites_count");
+		reblogsCount = json.optInt("reblogs_count");
+		favouritesCount = json.optInt("favourites_count");
 		reblogged = json.optString("reblogged");
 		favourited = json.optString("favourited");
 		sensitive = json.optString("sensitive");

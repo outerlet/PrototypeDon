@@ -19,6 +19,7 @@
 
 	<string name="text_instance_list">インスタンス一覧</string>
 	<string name="text_add_instance">インスタンスの追加</string>
+	<string name="text_add_status_by_tap">タップで読み込み</string>
 
 	<string name="message_initializing">初期化中です...</string>
 	<string name="message_instance_not_exists">インスタンス情報が見つかりません。\n登録画面に移動します。</string>

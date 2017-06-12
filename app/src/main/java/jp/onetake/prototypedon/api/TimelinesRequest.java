@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Locale;
 
 import jp.onetake.prototypedon.R;
 import jp.onetake.prototypedon.mastodon.TimelineType;
@@ -11,12 +12,14 @@ import jp.onetake.prototypedon.mastodon.TimelineType;
 public class TimelinesRequest extends ApiRequest {
 	private TimelineType mType;
 	private String mHashTag;
+	private long mMaxId;
 
 	public TimelinesRequest(Context context, TimelineType type) {
 		super(context, type.getApiId());
 
 		mType = type;
 		mHashTag = null;
+		mMaxId = -1;
 	}
 
 	public TimelinesRequest(Context context, String hashTag, int apiId) {
@@ -24,31 +27,44 @@ public class TimelinesRequest extends ApiRequest {
 
 		mType = null;
 		mHashTag = hashTag;
+		mMaxId = -1;
+	}
+
+	public void setMaxId(long maxId) {
+		mMaxId = maxId;
 	}
 
 	@Override
 	public String getPath() {
-		String textURL;
+		StringBuilder path;
+		boolean hasParam = false;
 
+		// ハッシュタグ以外(ホーム、ローカル、連合)
 		if (mType != null) {
-			textURL = getContext().getString(mType.getUrlResourceId());
+			path = new StringBuilder(getContext().getString(mType.getUrlResourceId()));
 
+			// ローカルの場合は連合用のリクエストにクエリパラメータをつける
 			if (mType == TimelineType.Local) {
-				return textURL + "?local=true";
+				path.append("?local=true");
+				hasParam = true;
 			}
-
-			return textURL;
+		// ハッシュタグ
+		} else {
+			path = new StringBuilder(getContext().getString(R.string.api_path_timelines_hashtag));
+			try {
+				String hashTag = URLEncoder.encode(mHashTag, "UTF-8");
+				path.append("/").append(hashTag);
+			} catch (UnsupportedEncodingException ignore) {
+				path.append("/").append(mHashTag);
+			}
 		}
 
-		String hashTag;
-
-		try {
-			hashTag = URLEncoder.encode(mHashTag, "UTF-8");
-		} catch (UnsupportedEncodingException ignore) {
-			hashTag = mHashTag;
+		if (mMaxId != -1) {
+			String query = String.format(Locale.US, "max_id=%1$s", Long.toString(mMaxId));
+			path.append(hasParam ? "&" : "?").append(query);
 		}
 
-		return getContext().getString(R.string.api_path_timelines_hashtag) + "/" + hashTag;
+		return path.toString();
 	}
 
 	@Override
