@@ -23,7 +23,6 @@ import jp.onetake.prototypedon.util.DebugLog;
 
 public class LaunchActivity extends BaseActivity
 		implements ApiExecuteThread.ApiResultListener, AlertDialogFragment.OnConfirmListener {
-	private static final int API_ID_VERIFY_CREDENTIALS			= 10001;
 	private static final String TAG_DIALOG_INVALID_INSTANCE		= "LaunchActivity.TAG_DIALOG_INVALID_INSTANCE";
 	private static final String TAG_DIALOG_INSTANCE_NOT_EXIST	= "LaunchActivity.TAG_DIALOG_INSTANCE_EMPTY";
 
@@ -86,7 +85,7 @@ public class LaunchActivity extends BaseActivity
 					mInstanceHolder.save(getApplicationContext());
 
 					if (mInstanceHolder.size() > 0) {
-						startActivity(new Intent(this, TimelinesActivity.class));
+						startActivity(TimelinesActivity.createLaunchIntent(this, 0));
 					} else {
 						AlertDialogFragment
 								.newInstance(getString(R.string.phrase_confirmation), getString(R.string.message_instance_not_exists))
@@ -102,7 +101,7 @@ public class LaunchActivity extends BaseActivity
 
 				break;
 			case AuthorizeFragment.DIALOG_TAG_SUCCESS:
-				Intent intent = new Intent(this, TimelinesActivity.class);
+				Intent intent = TimelinesActivity.createLaunchIntent(this, 0);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 
@@ -116,8 +115,8 @@ public class LaunchActivity extends BaseActivity
 
 	private void verifyCredentials() {
 		if (++mCurrentIndex < mInstanceHolder.size()) {
-			VerifyCredentialsRequest request =
-					new VerifyCredentialsRequest(getApplicationContext(), API_ID_VERIFY_CREDENTIALS);
+			VerifyCredentialsRequest request = new VerifyCredentialsRequest(
+					getApplicationContext(), getResources().getInteger(R.integer.api_id_verify_credentials));
 
 			Instance instance = mInstanceHolder.get(mCurrentIndex);
 
@@ -135,7 +134,7 @@ public class LaunchActivity extends BaseActivity
 						.newInstance(getString(R.string.phrase_error), text)
 						.show(getSupportFragmentManager(), TAG_DIALOG_INVALID_INSTANCE);
 			} else {
-				Intent intent = new Intent(this, TimelinesActivity.class);
+				Intent intent = TimelinesActivity.createLaunchIntent(this, 0);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 

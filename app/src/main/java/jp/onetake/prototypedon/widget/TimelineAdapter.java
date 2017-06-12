@@ -26,7 +26,6 @@ public class TimelineAdapter extends ArrayAdapter<Status> {
 
 	private AvatarHolder mHolder;
 	private StatusLinkMovementMethod mMethod;
-	private Instance mInstance;
 
 	public TimelineAdapter(Context context, StatusLinkMovementMethod method) {
 		super(context, -1);
@@ -36,8 +35,6 @@ public class TimelineAdapter extends ArrayAdapter<Status> {
 	}
 
 	public void setInstance(Instance instance) {
-		mInstance = instance;
-
 		mHolder.setHostName(instance.getHostName());
 	}
 

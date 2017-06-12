@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,21 @@ public class TimelineFragmentPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		return mPageList.get(position).fragment;
+	}
+
+	public void destroyAllItem(FragmentManager manager) {
+		FragmentTransaction trans = manager.beginTransaction();
+
+		for (Page page : mPageList) {
+			trans.remove(page.fragment);
+		}
+
+		trans.commit();
+	}
+
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
 	}
 
 	@Override

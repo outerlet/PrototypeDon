@@ -1,6 +1,5 @@
 package jp.onetake.prototypedon.fragment;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +16,16 @@ import jp.onetake.prototypedon.api.ApiExecuteThread;
 import jp.onetake.prototypedon.api.ApiResponse;
 import jp.onetake.prototypedon.api.RegisterClientRequest;
 import jp.onetake.prototypedon.api.RegisterClientResponse;
+import jp.onetake.prototypedon.fragment.dialog.AlertDialogFragment;
 import jp.onetake.prototypedon.mastodon.Instance;
 import jp.onetake.prototypedon.mastodon.InstanceHolder;
 import jp.onetake.prototypedon.util.DebugLog;
 
 public class AuthorizeFragment extends BaseFragment
 		implements View.OnClickListener, ApiExecuteThread.ApiResultListener {
-	public static final String DIALOG_TAG_SUCCESS		= "AuthorizeFragment.DIALOG_TAG_SUCCESS";
-	public static final String DIALOG_TAG_SAVE_ERROR	= "AuthorizeFragment.DIALOG_TAG_SAVE_ERROR";
+	public static final String DIALOG_TAG_SUCCESS				= "AuthorizeFragment.DIALOG_TAG_SUCCESS";
+	public static final String DIALOG_TAG_SAVE_ERROR			= "AuthorizeFragment.DIALOG_TAG_SAVE_ERROR";
+	public static final String DIALOG_TAG_ALREADY_REGISTERED	= "AuthorizeFragment.DIALOG_TAG_ALREADY_REGISTERED";
 
 	private EditText mHostNameView;
 	private EditText mMailAddressView;
@@ -32,12 +33,8 @@ public class AuthorizeFragment extends BaseFragment
 	private View mProgressView;
 	private Instance mInstance;
 
-	public AuthorizeFragment() {
-	}
-
 	@Override
-	public View onCreateView(
-			LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_authorize, container, false);
 
 		mHostNameView = (EditText)view.findViewById(R.id.edit_text_host_name);
@@ -53,6 +50,17 @@ public class AuthorizeFragment extends BaseFragment
 	@Override
 	public void onClick(View view) {
 		String hostName = mHostNameView.getText().toString();
+
+		InstanceHolder holder = InstanceHolder.getSingleton();
+		for (int i = 0; i < holder.size(); i++) {
+			if (holder.get(i).getHostName().equals(hostName)) {
+				AlertDialogFragment dialog = AlertDialogFragment.newInstance(
+						getString(R.string.message_instance_already_registered), getString(R.string.phrase_ok));
+				dialog.show(getActivity().getSupportFragmentManager(), DIALOG_TAG_ALREADY_REGISTERED);
+
+				return;
+			}
+		}
 
 		mInstance = new Instance();
 		mInstance.setHostName(hostName);

@@ -5,6 +5,14 @@
 	<dimen name="text_size_large">20sp</dimen>
 	<dimen name="text_margin">16dp</dimen>
 
+	<dimen name="margin_drawer_top_vertical">4dp</dimen>
+	<dimen name="margin_drawer_top_start">8dp</dimen>
+	<dimen name="padding_drawer_bottom_vertical">12dp</dimen>
+	<dimen name="padding_drawer_bottom_start">8dp</dimen>
+	<dimen name="margin_navigation_drawer_bottom">12dp</dimen>
+	<dimen name="padding_listitem_instance_vertical">18dp</dimen>
+	<dimen name="padding_listitem_instance_start">8dp</dimen>
+
 	<!-- Timeline -->
 	<dimen name="timeline_space_avatar_content">8dp</dimen>
 	<dimen name="timeline_padding">4dp</dimen>

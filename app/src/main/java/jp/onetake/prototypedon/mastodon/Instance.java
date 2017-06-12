@@ -1,5 +1,6 @@
 package jp.onetake.prototypedon.mastodon;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,6 +15,8 @@ public class Instance implements Serializable, Parcelable {
 	private String mId;
 	private String mClientId;
 	private String mClientSecret;
+	private transient Bitmap mAvatar;
+	private transient Bitmap mHeader;
 
 	public Instance() {
 		// 特に何もしない
@@ -25,6 +28,10 @@ public class Instance implements Serializable, Parcelable {
 		mId = in.readString();
 		mClientId = in.readString();
 		mClientSecret = in.readString();
+
+		ClassLoader loader = getClass().getClassLoader();
+		mAvatar = in.readParcelable(loader);
+		mHeader = in.readParcelable(loader);
 	}
 
 	public static final Creator<Instance> CREATOR = new Creator<Instance>() {
@@ -51,6 +58,8 @@ public class Instance implements Serializable, Parcelable {
 		dest.writeString(mId);
 		dest.writeString(mClientId);
 		dest.writeString(mClientSecret);
+		dest.writeParcelable(mAvatar, flags);
+		dest.writeParcelable(mHeader, flags);
 	}
 
 	public void setHostName(String hostName) {
@@ -91,6 +100,22 @@ public class Instance implements Serializable, Parcelable {
 
 	public String getAccessToken() {
 		return mAccessToken;
+	}
+
+	public void setAvatar(Bitmap avatar) {
+		mAvatar = avatar;
+	}
+
+	public Bitmap getAvatar() {
+		return mAvatar;
+	}
+
+	public void setHeader(Bitmap header) {
+		mHeader = header;
+	}
+
+	public Bitmap getHeader() {
+		return mHeader;
 	}
 
 	@Override

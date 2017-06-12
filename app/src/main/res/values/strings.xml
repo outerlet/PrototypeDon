@@ -17,6 +17,9 @@
 	<string name="title_timeline_local">ローカル</string>
 	<string name="title_timeline_public">連合</string>
 
+	<string name="text_instance_list">インスタンス一覧</string>
+	<string name="text_add_instance">インスタンスの追加</string>
+
 	<string name="message_initializing">初期化中です...</string>
 	<string name="message_instance_not_exists">インスタンス情報が見つかりません。\n登録画面に移動します。</string>
 	<string name="message_instance_saved">インスタンスを登録しました。</string>
@@ -25,5 +28,6 @@
 	<string name="message_invalid_instance_error">無効なインスタンス情報が%1$d件検出されました。\n削除します。</string>
 	<string name="message_get_timeline_error">タイムラインの取得に失敗しました。</string>
 	<string name="message_format_http_error">HTTP Error: Status code = %1$d</string>
+	<string name="message_instance_already_registered">インスタンスは既に登録されています。</string>
 
 </resources>
