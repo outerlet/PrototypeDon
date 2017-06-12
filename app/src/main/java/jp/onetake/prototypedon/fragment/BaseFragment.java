@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 
 import jp.onetake.prototypedon.fragment.dialog.AlertDialogFragment;
 
-public class BasicFragment extends Fragment {
+public class BaseFragment extends Fragment {
 	protected void showDialog(int titleResId, int messageResId, String tag) {
 		AlertDialogFragment
 				.newInstance(getString(titleResId), getString(messageResId))

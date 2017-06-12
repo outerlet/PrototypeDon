@@ -21,8 +21,8 @@ import jp.onetake.prototypedon.mastodon.Instance;
  */
 public abstract class ApiExecuteThread extends Thread {
 	public interface ApiResultListener {
-		void onApiSuccess(int identifier, ApiResponse response);
-		void onApiFailure(int identifier, ApiException exception);
+		void onApiSuccess(int apiId, ApiResponse response);
+		void onApiFailure(int apiId, ApiException exception);
 	}
 
 	// 実行結果をUIスレッドに戻すためのHandler
@@ -40,10 +40,10 @@ public abstract class ApiExecuteThread extends Thread {
 
 				switch (msg.what) {
 					case MSG_WHAT_SUCCESS:
-						mmThread.mListener.onApiSuccess(result.identifier, result.response);
+						mmThread.mListener.onApiSuccess(result.apiId, result.response);
 						break;
 					case MSG_WHAT_FAILURE:
-						mmThread.mListener.onApiFailure(result.identifier, result.exception);
+						mmThread.mListener.onApiFailure(result.apiId, result.exception);
 						break;
 				}
 			}
@@ -52,12 +52,12 @@ public abstract class ApiExecuteThread extends Thread {
 
 	// 実行結果を伝えるために必要なオブジェクトを保持させるためのクラス
 	private static class ApiResult {
-		int identifier;
+		int apiId;
 		ApiResponse response;
 		ApiException exception;
 
-		ApiResult(int identifier, ApiResponse response, ApiException exception) {
-			this.identifier = identifier;
+		ApiResult(int apiId, ApiResponse response, ApiException exception) {
+			this.apiId = apiId;
 			this.response = response;
 			this.exception = exception;
 		}
@@ -172,7 +172,7 @@ public abstract class ApiExecuteThread extends Thread {
 
 	private void sendResultToHandler(int what, ApiResponse response, ApiException exception) {
 		mHandler.obtainMessage(
-				what, new ApiResult(mRequest.getIdentifier(), response, exception)).sendToTarget();
+				what, new ApiResult(mRequest.getApiId(), response, exception)).sendToTarget();
 	}
 
 	protected abstract void connect(HttpURLConnection connection) throws ApiException;

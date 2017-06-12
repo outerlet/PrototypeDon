@@ -21,7 +21,7 @@ import jp.onetake.prototypedon.mastodon.Instance;
 import jp.onetake.prototypedon.mastodon.InstanceHolder;
 import jp.onetake.prototypedon.util.DebugLog;
 
-public class AuthorizeFragment extends BasicFragment
+public class AuthorizeFragment extends BaseFragment
 		implements View.OnClickListener, ApiExecuteThread.ApiResultListener {
 	public static final String DIALOG_TAG_SUCCESS		= "AuthorizeFragment.DIALOG_TAG_SUCCESS";
 	public static final String DIALOG_TAG_SAVE_ERROR	= "AuthorizeFragment.DIALOG_TAG_SAVE_ERROR";
@@ -68,8 +68,8 @@ public class AuthorizeFragment extends BasicFragment
 	}
 
 	@Override
-	public void onApiSuccess(int identifier, ApiResponse response) {
-		if (identifier == getResources().getInteger(R.integer.api_id_register_client)) {
+	public void onApiSuccess(int apiId, ApiResponse response) {
+		if (apiId == getResources().getInteger(R.integer.api_id_register_client)) {
 			RegisterClientResponse res = (RegisterClientResponse) response;
 
 			mInstance.setClientId(res.clientId);
@@ -96,7 +96,7 @@ public class AuthorizeFragment extends BasicFragment
 			ApiExecuteThread thread = ApiExecuteThread.newInstance(mInstance, request);
 			thread.setListener(this);
 			thread.start();
-		} else if (identifier == getResources().getInteger(R.integer.api_id_access_token)) {
+		} else if (apiId == getResources().getInteger(R.integer.api_id_access_token)) {
 			AccessTokenResponse res = (AccessTokenResponse)response;
 
 			mInstance.setAccessToken(res.accessToken);
@@ -120,7 +120,7 @@ public class AuthorizeFragment extends BasicFragment
 	}
 
 	@Override
-	public void onApiFailure(int identifier, ApiException exception) {
+	public void onApiFailure(int apiId, ApiException exception) {
 		if (exception.getCause() != null) {
 			exception.getCause().printStackTrace();
 		} else {

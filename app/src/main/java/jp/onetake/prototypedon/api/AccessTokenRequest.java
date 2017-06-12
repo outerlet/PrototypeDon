@@ -12,8 +12,8 @@ public class AccessTokenRequest extends ApiRequest {
 	public String password;
 	public String scope;
 
-	public AccessTokenRequest(Context context, int identifier) {
-		super(context, identifier);
+	public AccessTokenRequest(Context context, int apiId) {
+		super(context, apiId);
 	}
 
 	@Override

@@ -12,19 +12,19 @@ public abstract class ApiRequest {
 	}
 
 	private Context mContext;
-	private int mIdentifier;
+	private int mApiId;
 
-	public ApiRequest(Context context, int identifier) {
+	public ApiRequest(Context context, int apiId) {
 		mContext = context;
-		mIdentifier = identifier;
+		mApiId = apiId;
 	}
 
 	public Context getContext() {
 		return mContext;
 	}
 
-	public int getIdentifier() {
-		return mIdentifier;
+	public int getApiId() {
+		return mApiId;
 	}
 
 	/**

@@ -21,7 +21,7 @@ import jp.onetake.prototypedon.mastodon.Instance;
 import jp.onetake.prototypedon.mastodon.InstanceHolder;
 import jp.onetake.prototypedon.util.DebugLog;
 
-public class LaunchActivity extends BasicActivity
+public class LaunchActivity extends BaseActivity
 		implements ApiExecuteThread.ApiResultListener, AlertDialogFragment.OnConfirmListener {
 	private static final int API_ID_VERIFY_CREDENTIALS			= 10001;
 	private static final String TAG_DIALOG_INVALID_INSTANCE		= "LaunchActivity.TAG_DIALOG_INVALID_INSTANCE";
@@ -53,12 +53,12 @@ public class LaunchActivity extends BasicActivity
     }
 
 	@Override
-	public void onApiSuccess(int identifier, ApiResponse response) {
+	public void onApiSuccess(int apiId, ApiResponse response) {
 		verifyCredentials();
 	}
 
 	@Override
-	public void onApiFailure(int identifier, ApiException exception) {
+	public void onApiFailure(int apiId, ApiException exception) {
 		if (exception.getCause() != null) {
 			exception.getCause().printStackTrace();
 		} else {
@@ -138,6 +138,9 @@ public class LaunchActivity extends BasicActivity
 				Intent intent = new Intent(this, TimelinesActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
+
+				// Activity遷移時にデフォルトアニメがつくと不恰好に見えるのでとりあえず無効に
+				overridePendingTransition(0, 0);
 			}
 		}
 	}

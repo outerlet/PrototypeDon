@@ -19,6 +19,8 @@
 		</activity>
 		<activity android:name=".activity.TimelinesActivity">
 		</activity>
+		<activity android:name=".activity.SingleTimelineActivity">
+		</activity>
 	</application>
 
 </manifest>

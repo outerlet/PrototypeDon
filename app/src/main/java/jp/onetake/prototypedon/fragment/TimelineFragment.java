@@ -3,6 +3,7 @@ package jp.onetake.prototypedon.fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import jp.onetake.prototypedon.mastodon.TimelineType;
 import jp.onetake.prototypedon.text.StatusLinkMovementMethod;
 import jp.onetake.prototypedon.widget.TimelineAdapter;
 
-public class TimelineFragment extends BasicFragment
+public class TimelineFragment extends BaseFragment
 		implements ApiExecuteThread.ApiResultListener, StatusLinkMovementMethod.LinkClickListener {
 	public interface TimelineEventListener {
 		void onLinkClick(Uri uri);
@@ -35,14 +36,27 @@ public class TimelineFragment extends BasicFragment
 
 	private static final String KEY_INSTANCE	= "TimelineFragment.KEY_INSTANCE";
 	private static final String KEY_TYPE		= "TimelineFragment.KEY_TYPE";
+	private static final String KEY_HASHTAG 	= "TimelineFragment.KEY_HASHTAG";
+	private static final String KEY_API_ID		= "TimelineFragment.KEY_API_ID";
 
 	public static TimelineFragment newInstance(Instance instance, TimelineType type) {
-		Bundle args = new Bundle();
-		args.putParcelable(KEY_INSTANCE, instance);
-		args.putString(KEY_TYPE, type.toString());
+		Bundle params = new Bundle();
+		params.putParcelable(KEY_INSTANCE, instance);
+		params.putString(KEY_TYPE, type.toString());
 
 		TimelineFragment fragment = new TimelineFragment();
-		fragment.setArguments(args);
+		fragment.setArguments(params);
+		return fragment;
+	}
+
+	public static TimelineFragment newInstance(Instance instance, String hashTag, int apiId) {
+		Bundle params = new Bundle();
+		params.putParcelable(KEY_INSTANCE, instance);
+		params.putString(KEY_HASHTAG, hashTag);
+		params.putInt(KEY_API_ID, apiId);
+
+		TimelineFragment fragment = new TimelineFragment();
+		fragment.setArguments(params);
 		return fragment;
 	}
 
@@ -51,6 +65,8 @@ public class TimelineFragment extends BasicFragment
 	private View mProgressView;
 	private Instance mInstance;
 	private TimelineType mType;
+	private String mHashTag;
+	private int mApiId;
 	private Trigger mTrigger;
 
 	@Override
@@ -83,13 +99,27 @@ public class TimelineFragment extends BasicFragment
 		super.onActivityCreated(savedInstanceState);
 
 		mInstance = getArguments().getParcelable(KEY_INSTANCE);
-		mType = TimelineType.getByString(getArguments().getString(KEY_TYPE));
+		((TimelineAdapter)mListView.getAdapter()).setInstance(mInstance);
+
+		String textType = getArguments().getString(KEY_TYPE);
+		if (!TextUtils.isEmpty(textType)) {
+			mType = TimelineType.getByString(textType);
+		} else {
+			mHashTag = getArguments().getString(KEY_HASHTAG);
+			mApiId = getArguments().getInt(KEY_API_ID);
+		}
 
 		launchRequest(Trigger.Initial);
 	}
 
 	private void launchRequest(Trigger trigger) {
-		TimelinesRequest request = new TimelinesRequest(getContext(), mType);
+		TimelinesRequest request;
+
+		if (mType != null) {
+			request = new TimelinesRequest(getContext(), mType);
+		} else {
+			request = new TimelinesRequest(getContext(), mHashTag, mApiId);
+		}
 
 		ApiExecuteThread thread = ApiExecuteThread.newInstance(mInstance, request);
 		thread.setListener(this);
@@ -99,7 +129,7 @@ public class TimelineFragment extends BasicFragment
 	}
 
 	@Override
-	public void onApiSuccess(int identifier, ApiResponse response) {
+	public void onApiSuccess(int apiId, ApiResponse response) {
 		TimelinesResponse res = (TimelinesResponse)response;
 
 		TimelineAdapter adapter = (TimelineAdapter)mListView.getAdapter();
@@ -115,12 +145,10 @@ public class TimelineFragment extends BasicFragment
 	}
 
 	@Override
-	public void onApiFailure(int identifier, ApiException exception) {
-		if (identifier == getResources().getInteger(R.integer.api_id_public_timeline)) {
-			dismissProgress();
+	public void onApiFailure(int apiId, ApiException exception) {
+		dismissProgress();
 
-			Toast.makeText(getContext(), R.string.message_get_timeline_error, Toast.LENGTH_LONG).show();
-		}
+		Toast.makeText(getContext(), R.string.message_get_timeline_error, Toast.LENGTH_LONG).show();
 	}
 
 	@Override

@@ -9,8 +9,8 @@ public class RegisterClientRequest extends ApiRequest {
 	public String redirect_uris;
 	public String scopes;
 
-	public RegisterClientRequest(Context context, int identifier) {
-		super(context, identifier);
+	public RegisterClientRequest(Context context, int apiId) {
+		super(context, apiId);
 
 		client_name = context.getString(R.string.app_name);
 		redirect_uris = context.getString(R.string.api_uri_register_client);

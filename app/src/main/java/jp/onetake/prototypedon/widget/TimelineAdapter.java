@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import jp.onetake.prototypedon.R;
+import jp.onetake.prototypedon.mastodon.Instance;
 import jp.onetake.prototypedon.mastodon.Status;
 import jp.onetake.prototypedon.net.ImageLoadThread;
 import jp.onetake.prototypedon.text.StatusLinkMovementMethod;
@@ -25,12 +26,19 @@ public class TimelineAdapter extends ArrayAdapter<Status> {
 
 	private AvatarHolder mHolder;
 	private StatusLinkMovementMethod mMethod;
+	private Instance mInstance;
 
 	public TimelineAdapter(Context context, StatusLinkMovementMethod method) {
 		super(context, -1);
 
 		mHolder = new AvatarHolder(context);
 		mMethod = method;
+	}
+
+	public void setInstance(Instance instance) {
+		mInstance = instance;
+
+		mHolder.setHostName(instance.getHostName());
 	}
 
 	public void add(List<Status> statusList) {
