@@ -12,6 +12,7 @@
 	<string name="phrase_password">パスワード</string>
 	<string name="phrase_execute">実行</string>
 
+	<string name="title_timeline">タイムライン</string>
 	<string name="title_timeline_home">ホーム</string>
 	<string name="title_timeline_local">ローカル</string>
 	<string name="title_timeline_public">連合</string>

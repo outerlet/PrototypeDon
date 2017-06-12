@@ -54,7 +54,7 @@ public class TimelineAdapter extends ArrayAdapter<Status> {
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
 
-			convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_timeline, parent, false);
+			convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_listitem_timeline, parent, false);
 			viewHolder.avatarView = (ImageView)convertView.findViewById(R.id.imageview_avatar);
 			viewHolder.textView = (TextView)convertView.findViewById(R.id.textview_content);
 			viewHolder.textView.setMovementMethod(mMethod);

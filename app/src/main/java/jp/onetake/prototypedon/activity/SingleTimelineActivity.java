@@ -3,9 +3,13 @@ package jp.onetake.prototypedon.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import jp.onetake.prototypedon.R;
+import jp.onetake.prototypedon.api.ApiException;
 import jp.onetake.prototypedon.fragment.TimelineFragment;
 import jp.onetake.prototypedon.mastodon.Instance;
 
@@ -33,7 +37,15 @@ public class SingleTimelineActivity extends TimelineBaseActivity {
 
 		Bundle data = getIntent().getBundleExtra(KEY_DATA);
 
-		setTitle(data.getString(KEY_TITLE));
+		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+		toolbar.setTitle(data.getString(KEY_TITLE));
+		toolbar.setNavigationIcon(R.mipmap.ic_close_white);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				finish();
+			}
+		});
 
 		Instance instance = data.getParcelable(KEY_INSTANCE);
 		setCurrentInstance(instance);
@@ -46,5 +58,10 @@ public class SingleTimelineActivity extends TimelineBaseActivity {
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 		trans.replace(R.id.layout_timeline, fragment);
 		trans.commit();
+	}
+
+	@Override
+	public void onLoadFailure(ApiException exception) {
+		Snackbar.make(findViewById(R.id.layout_container), R.string.message_get_timeline_error, Snackbar.LENGTH_SHORT).show();
 	}
 }

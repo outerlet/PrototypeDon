@@ -26,6 +26,7 @@ public class TimelineFragment extends BaseFragment
 		implements ApiExecuteThread.ApiResultListener, StatusLinkMovementMethod.LinkClickListener {
 	public interface TimelineEventListener {
 		void onLinkClick(Uri uri);
+		void onLoadFailure(ApiException exception);
 	}
 
 	private enum Trigger {
@@ -148,7 +149,9 @@ public class TimelineFragment extends BaseFragment
 	public void onApiFailure(int apiId, ApiException exception) {
 		dismissProgress();
 
-		Toast.makeText(getContext(), R.string.message_get_timeline_error, Toast.LENGTH_LONG).show();
+		if (getActivity() instanceof TimelineEventListener) {
+			((TimelineEventListener)getActivity()).onLoadFailure(exception);
+		}
 	}
 
 	@Override

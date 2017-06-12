@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import jp.onetake.prototypedon.R;
+import jp.onetake.prototypedon.api.ApiException;
 import jp.onetake.prototypedon.fragment.TimelineFragment;
 import jp.onetake.prototypedon.mastodon.Attachment;
 import jp.onetake.prototypedon.mastodon.Instance;
@@ -17,7 +19,7 @@ import jp.onetake.prototypedon.mastodon.InstanceHolder;
 import jp.onetake.prototypedon.util.DebugLog;
 import jp.onetake.prototypedon.widget.TimelineFragmentPagerAdapter;
 
-public class TimelineBaseActivity extends BaseActivity implements TimelineFragment.TimelineEventListener {
+public abstract class TimelineBaseActivity extends BaseActivity implements TimelineFragment.TimelineEventListener {
 	private Instance mCurrentInstance;
 
 	@Override
@@ -58,4 +60,7 @@ public class TimelineBaseActivity extends BaseActivity implements TimelineFragme
 	protected Instance getCurrentInstance() {
 		return mCurrentInstance;
 	}
+
+	@Override
+	public abstract void onLoadFailure(ApiException exception);
 }
