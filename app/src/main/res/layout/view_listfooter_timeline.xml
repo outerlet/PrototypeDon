@@ -34,7 +34,7 @@
 			android:layout_height="match_parent"
 			android:gravity="center_vertical|start"
 			android:textColor="@color/black"
-			android:textSize="@dimen/text_size_normal"
+			android:textSize="@dimen/text_size_middle"
 			android:text="@string/text_add_status_by_tap"
 			/>
 

@@ -8,5 +8,5 @@
 	android:paddingBottom="@dimen/padding_listitem_instance_vertical"
 	android:paddingStart="@dimen/padding_listitem_instance_start"
 	android:textColor="@color/black"
-	android:textSize="@dimen/text_size_normal"
+	android:textSize="@dimen/text_size_middle"
 	/>

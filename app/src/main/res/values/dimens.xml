@@ -1,9 +1,14 @@
 <resources>
 
-	<dimen name="text_size_small">8sp</dimen>
-	<dimen name="text_size_normal">14sp</dimen>
-	<dimen name="text_size_large">20sp</dimen>
-	<dimen name="text_margin">16dp</dimen>
+	<dimen name="text_size_small2">12sp</dimen>
+	<dimen name="text_size_small1">14sp</dimen>
+	<dimen name="text_size_middle">16sp</dimen>
+	<dimen name="text_size_large1">18sp</dimen>
+	<dimen name="text_size_large2">20sp</dimen>
+
+	<dimen name="margin_small">4dp</dimen>
+	<dimen name="margin_middle">8dp</dimen>
+	<dimen name="margin_large">12dp</dimen>
 
 	<dimen name="margin_drawer_top_vertical">4dp</dimen>
 	<dimen name="margin_drawer_top_start">8dp</dimen>
@@ -14,7 +19,6 @@
 	<dimen name="padding_listitem_instance_start">8dp</dimen>
 
 	<!-- Timeline -->
-	<dimen name="timeline_space_avatar_content">8dp</dimen>
 	<dimen name="timeline_padding">4dp</dimen>
 	<dimen name="timeline_footer_padding">12dp</dimen>
 
