@@ -9,45 +9,22 @@
 		android:layout_height="match_parent"
 		android:padding="12dp">
 
+		<EditText
+			android:id="@+id/edittext_host_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:layout_marginLeft="12dp"
+			android:layout_marginRight="12dp"
+			android:hint="@string/phrase_host_name"
+			/>
+
 		<Button
 			android:id="@+id/button_execute"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
 			android:text="@string/phrase_execute"
-			/>
-
-		<EditText
-			android:id="@+id/edittext_mail_address"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_centerInParent="true"
-			android:layout_marginLeft="12dp"
-			android:layout_marginRight="12dp"
-			android:hint="@string/phrase_mail_address"
-			/>
-
-		<EditText
-			android:id="@+id/edittext_host_name"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_above="@+id/edittext_mail_address"
-			android:layout_marginLeft="12dp"
-			android:layout_marginRight="12dp"
-			android:layout_marginBottom="36dp"
-			android:hint="@string/phrase_host_name"
-			/>
-
-		<EditText
-			android:id="@+id/edittext_password"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/edittext_mail_address"
-			android:layout_marginLeft="12dp"
-			android:layout_marginRight="12dp"
-			android:layout_marginTop="36dp"
-			android:inputType="textPassword"
-			android:hint="@string/phrase_password"
 			/>
 
 	</RelativeLayout>

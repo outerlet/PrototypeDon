@@ -1,5 +1,7 @@
 package jp.onetake.prototypedon.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.EditText;
 import java.io.IOException;
 
 import jp.onetake.prototypedon.R;
+import jp.onetake.prototypedon.activity.OAuthActivity;
 import jp.onetake.prototypedon.api.AccessTokenRequest;
 import jp.onetake.prototypedon.api.AccessTokenResponse;
 import jp.onetake.prototypedon.api.ApiException;
@@ -27,9 +30,9 @@ public class AuthorizeFragment extends BaseFragment
 	public static final String DIALOG_TAG_SAVE_ERROR			= "AuthorizeFragment.DIALOG_TAG_SAVE_ERROR";
 	public static final String DIALOG_TAG_ALREADY_REGISTERED	= "AuthorizeFragment.DIALOG_TAG_ALREADY_REGISTERED";
 
+	private static final int REQUEST_CODE_OAUTH	= 10001;
+
 	private EditText mHostNameView;
-	private EditText mMailAddressView;
-	private EditText mPasswordView;
 	private View mProgressView;
 	private Instance mInstance;
 
@@ -38,13 +41,34 @@ public class AuthorizeFragment extends BaseFragment
 		View view = inflater.inflate(R.layout.fragment_authorize, container, false);
 
 		mHostNameView = (EditText)view.findViewById(R.id.edittext_host_name);
-		mMailAddressView = (EditText)view.findViewById(R.id.edittext_mail_address);
-		mPasswordView = (EditText)view.findViewById(R.id.edittext_password);
 		mProgressView = view.findViewById(R.id.layout_progress);
 
 		view.findViewById(R.id.button_execute).setOnClickListener(this);
 
 		return view;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_CODE_OAUTH) {
+			if (resultCode == Activity.RESULT_OK) {
+				String authCode = data.getStringExtra(OAuthActivity.KEY_AUTH_CODE);
+
+				DebugLog.debug(getClass(), "Authorization-Code = " + authCode);
+
+				AccessTokenRequest request =
+						new AccessTokenRequest(getActivity(), getResources().getInteger(R.integer.api_id_access_token));
+				request.addParameter("client_id", mInstance.getClientId());
+				request.addParameter("client_secret", mInstance.getClientSecret());
+				request.addParameter("code", authCode);
+
+				ApiExecuteThread thread = ApiExecuteThread.newInstance(mInstance, request);
+				thread.setListener(this);
+				thread.start();
+			} else {
+				mProgressView.setVisibility(View.INVISIBLE);
+			}
+		}
 	}
 
 	@Override
@@ -83,33 +107,14 @@ public class AuthorizeFragment extends BaseFragment
 			mInstance.setClientId(res.clientId);
 			mInstance.setClientSecret(res.clientSecret);
 
-			DebugLog.debug(getClass(), "clientId = " + res.clientId);
-			DebugLog.debug(getClass(), "clientSecret = " + res.clientSecret);
-
-			// FIXME:パスワードでOAuth認証はまずいので、以下の『FROM』〜『TO』はいずれ修正すること
-			// FROM
-			String mailAddress = mMailAddressView.getText().toString();
-			String password = mPasswordView.getText().toString();
-
-			AccessTokenRequest request =
-					new AccessTokenRequest(getActivity(), getResources().getInteger(R.integer.api_id_access_token));
-			request.client_id = res.clientId;
-			request.client_secret = res.clientSecret;
-			request.grant_type = "password";
-			request.username = mailAddress;
-			request.password = password;
-			request.scope = "read%20write%20follow";
-			// TO
-
-			ApiExecuteThread thread = ApiExecuteThread.newInstance(mInstance, request);
-			thread.setListener(this);
-			thread.start();
+			startActivityForResult(
+					OAuthActivity.createLaunchIntent(getActivity(), mInstance), REQUEST_CODE_OAUTH);
 		} else if (apiId == getResources().getInteger(R.integer.api_id_access_token)) {
 			AccessTokenResponse res = (AccessTokenResponse)response;
 
 			mInstance.setAccessToken(res.accessToken);
 
-			DebugLog.debug(getClass(), "access_token = " + res.accessToken);
+			DebugLog.debug(getClass(), "Access-Token = " + res.accessToken);
 
 			try {
 				InstanceHolder holder = InstanceHolder.getSingleton();

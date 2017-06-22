@@ -5,16 +5,12 @@ import android.content.Context;
 import jp.onetake.prototypedon.R;
 
 public class RegisterClientRequest extends ApiRequest {
-	public String client_name;
-	public String redirect_uris;
-	public String scopes;
-
 	public RegisterClientRequest(Context context, int apiId) {
 		super(context, apiId);
 
-		client_name = context.getString(R.string.app_name);
-		redirect_uris = context.getString(R.string.api_uri_register_client);
-		scopes = context.getString(R.string.api_scope_register_client);
+		addParameter("client_name", context.getString(R.string.app_name));
+		addParameter("redirect_uris", context.getString(R.string.api_auth_redirect_uri));
+		addParameter("scopes", context.getString(R.string.api_auth_scope));
 	}
 
 	@Override

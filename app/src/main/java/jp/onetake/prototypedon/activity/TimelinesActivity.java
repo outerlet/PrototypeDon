@@ -146,7 +146,7 @@ public class TimelinesActivity extends TimelineBaseActivity
 	@Override
 	public void onInput(DialogFragment dialog, String inputText) {
 		TootRequest request = new TootRequest(this, getResources().getInteger(R.integer.api_id_toot));
-		request.setEncodedStatus(inputText);
+		request.addParameter("status", inputText);
 
 		ApiExecuteThread t = ApiExecuteThread.newInstance(getCurrentInstance(), request);
 		t.setListener(this);

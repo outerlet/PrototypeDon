@@ -15,8 +15,9 @@
 	<integer name="api_id_toot">10008</integer>
 
 	<string name="api_user_agent">Prototype-Don</string>
-	<string name="api_uri_register_client">urn:ietf:wg:oauth:2.0:oob</string>
-	<string name="api_scope_register_client">read write follow</string>
+	<string name="api_auth_redirect_uri">urn:ietf:wg:oauth:2.0:oob</string>
+	<string name="api_auth_scope">read write follow</string>
+	<string name="api_auth_authorization_code">authorization_code</string>
 	<integer name="api_connection_timeout">10000</integer>
 	<integer name="api_read_timeout">10000</integer>
 

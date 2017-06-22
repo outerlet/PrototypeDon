@@ -1,9 +1,11 @@
 package jp.onetake.prototypedon.api;
 
 import android.content.Context;
-import android.text.TextUtils;
 
-import java.lang.reflect.Field;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class ApiRequest {
 	public enum Method {
@@ -13,10 +15,12 @@ public abstract class ApiRequest {
 
 	private Context mContext;
 	private int mApiId;
+	private Map<String, String> mParams;
 
 	public ApiRequest(Context context, int apiId) {
 		mContext = context;
 		mApiId = apiId;
+		mParams = new HashMap<>();
 	}
 
 	public Context getContext() {
@@ -27,6 +31,10 @@ public abstract class ApiRequest {
 		return mApiId;
 	}
 
+	public void addParameter(String key, String value) {
+		mParams.put(key, value);
+	}
+
 	/**
 	 * このオブジェクトの持つフィールド名とその値を、"key1=value1&key2=value2"フォーマットの文字列にして返す
 	 * @return	"key1=value1&key2=value2"フォーマットの文字列
@@ -34,43 +42,16 @@ public abstract class ApiRequest {
 	public String createParams() {
 		StringBuilder buffer = new StringBuilder();
 
-		Class thisClass = getClass();
-		buffer.append(createParams(thisClass, this));
-
-		Class superClass = thisClass.getSuperclass();
-
-		// クラスがObjectの場合はgetSuperClass()でnullが返されるはずだが、返されない場合があるようなので
-		if (superClass != null && !superClass.equals(Object.class)) {
-			String superParams = createParams(superClass, this);
-			if (!TextUtils.isEmpty(superParams)) {
-				buffer.append("&").append(superParams);
-			}
-		}
-
-		return buffer.toString();
-	}
-
-	/**
-	 * sourceオブジェクトの全フィールドとその値を、HTTPリクエストに投げるために
-	 * "key1=value1&key2=value2"フォーマットの文字列にして返す
-	 * @param cls		文字列の元となるクラスオブジェクト
-	 * @param source	値を取り出すcls型のオブジェクト
-	 * @return	"key1=value1&key2=value2"フォーマットの文字列
-	 */
-	private String createParams(Class cls, Object source) {
-		StringBuilder buffer = new StringBuilder();
-
-		Field[] fields = cls.getFields();
-		for (int i = 0; i < fields.length; i++) {
-			if (i > 0) {
+		for (String key : mParams.keySet()) {
+			if (buffer.length() > 0) {
 				buffer.append("&");
 			}
 
 			try {
-				Field field = fields[i];
-				buffer.append(field.getName()).append("=").append(field.get(source));
-			} catch (IllegalAccessException iae) {
-				iae.printStackTrace();
+				String value = URLEncoder.encode(mParams.get(key), "UTF-8");
+				buffer.append(key).append("=").append(value);
+			} catch (UnsupportedEncodingException uee) {
+				uee.printStackTrace();
 			}
 		}
 

@@ -5,15 +5,11 @@ import android.content.Context;
 import jp.onetake.prototypedon.R;
 
 public class AccessTokenRequest extends ApiRequest {
-	public String client_id;
-	public String client_secret;
-	public String grant_type;
-	public String username;
-	public String password;
-	public String scope;
-
 	public AccessTokenRequest(Context context, int apiId) {
 		super(context, apiId);
+
+		addParameter("grant_type", context.getString(R.string.api_auth_authorization_code));
+		addParameter("redirect_uri", context.getString(R.string.api_auth_redirect_uri));
 	}
 
 	@Override

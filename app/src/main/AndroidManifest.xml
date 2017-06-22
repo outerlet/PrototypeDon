@@ -24,6 +24,8 @@
 		</activity>
 		<activity android:name=".activity.AddInstanceActivity">
 		</activity>
+		<activity android:name=".activity.OAuthActivity">
+		</activity>
 	</application>
 
 </manifest>
