@@ -48,13 +48,12 @@ public class TimelinesActivity extends TimelineBaseActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_timelines);
 
-		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-		toolbar.setNavigationIcon(R.mipmap.ic_menu_white);
-		setSupportActionBar(toolbar);
+		Toolbar toolbar = getToolbar();
 
-		mDrawerLayout = (DrawerLayout)findViewById(R.id.layout_container);
+		mDrawerLayout = (DrawerLayout)findViewById(R.id.layout_navigation_drawer);
 
 		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name);
 		mDrawerLayout.addDrawerListener(toggle);
@@ -70,6 +69,8 @@ public class TimelinesActivity extends TimelineBaseActivity
 		int instanceIndex = getIntent().getIntExtra(KEY_INSTANCE_INDEX, 0);
 		Instance instance = InstanceHolder.getSingleton().get(instanceIndex);
 		setCurrentInstance(instance);
+
+		toolbar.setNavigationIcon(R.mipmap.ic_menu_white);
 
 		String title = getString(R.string.title_timeline) + " - " + instance.getHostName();
 		toolbar.setTitle(title);
@@ -175,6 +176,6 @@ public class TimelinesActivity extends TimelineBaseActivity
 
 	// Snackbarでメッセージを表示
 	private void showSnackbar(int msgResId) {
-		Snackbar.make(findViewById(R.id.layout_container), msgResId, Snackbar.LENGTH_SHORT).show();
+		Snackbar.make(findViewById(R.id.layout_navigation_drawer), msgResId, Snackbar.LENGTH_SHORT).show();
 	}
 }

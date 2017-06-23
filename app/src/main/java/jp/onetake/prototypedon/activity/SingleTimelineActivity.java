@@ -33,11 +33,12 @@ public class SingleTimelineActivity extends TimelineBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_single_timeline);
 
 		Bundle data = getIntent().getBundleExtra(KEY_DATA);
 
-		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+		Toolbar toolbar = getToolbar();
 		toolbar.setTitle(data.getString(KEY_TITLE));
 		toolbar.setNavigationIcon(R.mipmap.ic_close_white);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -62,6 +63,6 @@ public class SingleTimelineActivity extends TimelineBaseActivity {
 
 	@Override
 	public void onLoadFailure(ApiException exception) {
-		Snackbar.make(findViewById(R.id.layout_container), R.string.message_get_timeline_error, Snackbar.LENGTH_SHORT).show();
+		Snackbar.make(findViewById(R.id.layout_timeline), R.string.message_get_timeline_error, Snackbar.LENGTH_SHORT).show();
 	}
 }
